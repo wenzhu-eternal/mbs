@@ -1,0 +1,85 @@
+.bg {
+  width     : 100vw;
+  height    : 100vh;
+  background: #000;
+}
+
+.taiji {
+  position        : absolute;
+  width           : 200px;
+  height          : 200px;
+  margin-top      : -100px;
+  margin-left     : -100px;
+  left            : 50%;
+  top             : 20%;
+  border-radius   : 50%;
+  background-color: #fff;
+  border          : 1px solid #ccc;
+  box-shadow      : 0 0 50px #fff;
+  animation       : spin 6s linear infinite;
+}
+
+.tj_1 {
+  position: absolute;
+  top     : 0;
+  width   : 50%;
+  height  : 100%;
+}
+
+.tj_big_1 {
+  left         : 0;
+  border-radius: ~'100% 0 0 100% /50% 0 0 50%';
+  background   : #000;
+}
+
+.tj_big_2 {
+  right           : 0;
+  border-radius   : ~'0 100% 100% 0 /0 50% 50% 0';
+  background-color: #fff;
+}
+
+.tj_2 {
+  position     : absolute;
+  width        : 50%;
+  height       : 50%;
+  left         : 25%;
+  border-radius: 50%;
+}
+
+.tj_s1 {
+  bottom          : 0;
+  background-color: #fff;
+}
+
+.tj_s2 {
+  top             : 0;
+  background-color: #000;
+}
+
+.tj_ss {
+  position     : absolute;
+  width        : 25%;
+  height       : 25%;
+  left         : 37.5%;
+  border-radius: 50%;
+}
+
+.tj_w {
+  top             : 37.5%;
+  background-color: #000;
+}
+
+.tj_b {
+  top             : 37.5%;
+  background-color: #fff;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
