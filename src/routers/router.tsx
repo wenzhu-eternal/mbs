@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { FC, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import routerConfig, { routerProps } from './routerConfig';
@@ -44,7 +45,7 @@ const renderRouter: FC<routerProps[]> = (routers) => {
               }
 
               if (route.component) {
-                let DynamicDetail = renderDetail(route.component);
+                const DynamicDetail = renderDetail(route.component);
                 return (
                   <Suspense fallback={<Loading />}>
                     <DynamicDetail route={dynamicDetailRoute}>{renderChildRoutes}</DynamicDetail>
