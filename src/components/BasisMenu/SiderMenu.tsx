@@ -52,16 +52,11 @@ export default function SiderMenu({
   }
 
   return (
-    <Layout.Sider
-      className={styles.SiderMenu}
-    >
-      <div className={styles.logo}>
-        文竹
-      </div>
+    <Layout.Sider className={styles.SiderMenu} collapsed={false}>
+      <div className={styles.logo}>文竹</div>
       <Menu
         theme="dark"
         mode="inline"
-        inlineCollapsed={false}
         openKeys={openKey}
         selectedKeys={[pathname]}
         onOpenChange={onChangeOpenKeys}
