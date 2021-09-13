@@ -1,4 +1,5 @@
 const path = require('path');
+const fastRefreshCracoPlugin = require('craco-fast-refresh');
 const CracoAntDesignPlugin = require('craco-antd');
 const CracoLessPlugin = require("craco-less");
 
@@ -9,6 +10,7 @@ module.exports = {
     },
   },
   plugins: [
+    { plugin: fastRefreshCracoPlugin },
     {
       plugin: CracoAntDesignPlugin,
       options: {
