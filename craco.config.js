@@ -1,7 +1,7 @@
-const path = require('path');
-const fastRefreshCracoPlugin = require('craco-fast-refresh');
+const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const CracoAntDesignPlugin = require('craco-antd');
 const CracoLessPlugin = require("craco-less");
+const path = require('path');
 
 module.exports = {
   webpack: {
@@ -10,7 +10,7 @@ module.exports = {
     },
   },
   plugins: [
-    { plugin: fastRefreshCracoPlugin },
+    { plugin: new ReactRefreshPlugin() },
     {
       plugin: CracoAntDesignPlugin,
       options: {
