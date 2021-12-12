@@ -1,4 +1,8 @@
 import MyIcon from './Icons';
-import request from './request';
+import request, { getIP } from './request';
 
-export { MyIcon, request };
+export {
+  MyIcon,
+  request,
+  getIP,
+};
