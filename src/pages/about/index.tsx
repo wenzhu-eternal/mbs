@@ -1,11 +1,18 @@
 import { request } from "@/utils";
 import { useEffect } from "react";
+import WebSocket from "@/components/WebSocket";
 
 export default function About() {
   useEffect(() => {
-    request('GET', 'api/user/findUsers?page=1&pageSize=10')
-      .then((res) => console.log('res :>> ', res))
-      .catch((err) => console.log('err :>> ', err))
+    request({
+      url: 'api/user/findUsers?page=1&pageSize=10',
+      method: 'GET',
+    }).then((res: any) => console.log('res :>> ', res))
+      .catch((err: any) => console.log('err :>> ', err))
   }, [])
-  return <h2>About</h2>;
+
+  return <h2>
+    <WebSocket dataName="wsData" callback={(data) => console.log('data :>> ', data)} />
+    WebSocket
+  </h2>;
 }
