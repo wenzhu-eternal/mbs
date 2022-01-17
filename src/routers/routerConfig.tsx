@@ -1,18 +1,18 @@
 import type { RouteChildrenProps } from 'react-router-dom';
 
 export interface routerProps {
-  path: string,
-  name?: string,
-  icon?: string,
-  redirect?: string,
-  exact?: boolean,
-  strict?: boolean,
-  component?: string,
-  children?: Array<routerProps>,
+  path: string;
+  name?: string;
+  icon?: string;
+  redirect?: string;
+  exact?: boolean;
+  strict?: boolean;
+  component?: string;
+  children?: Array<routerProps>;
 }
 
 export interface routeProps extends RouteChildrenProps {
-  children: routerProps[]
+  children: routerProps[];
 }
 
 const routerConfig: routerProps[] = [
@@ -22,7 +22,7 @@ const routerConfig: routerProps[] = [
     children: [
       {
         path: '/404',
-        component: 'components/NotFount'
+        component: 'components/NotFount',
       },
       {
         path: '/',
@@ -50,10 +50,10 @@ const routerConfig: routerProps[] = [
                   {
                     path: '/layout/one',
                     exact: true,
-                    redirect: '/layout/one/one'
+                    redirect: '/layout/one/one',
                   },
-                  { path: '*', exact: true, redirect: '/404' }
-                ]
+                  { path: '*', exact: true, redirect: '/404' },
+                ],
               },
               {
                 path: '/layout/two',
@@ -63,21 +63,21 @@ const routerConfig: routerProps[] = [
                 component: 'pages/about',
               },
               { path: '/layout', exact: true, redirect: '/layout/one' },
-              { path: '*', exact: true, redirect: '/404' }
-            ]
+              { path: '*', exact: true, redirect: '/404' },
+            ],
           },
           {
             path: '/layout2',
             name: '边栏2',
             icon: 'iconhear-full',
-            component: 'pages/home'
+            component: 'pages/home',
           },
           { path: '/', exact: true, redirect: '/layout' },
-          { path: '*', exact: true, redirect: '/404' }
-        ]
+          { path: '*', exact: true, redirect: '/404' },
+        ],
       },
-    ]
-  }
-]
+    ],
+  },
+];
 
 export default routerConfig;

@@ -16,7 +16,7 @@ const request = axios.create({
     Accept: 'application/json',
   },
   timeout: 3000,
-})
+});
 
 request.interceptors.request.use((config: any) => {
   config['headers']['x-auth-token'] = cookie.load('x-auth-token');
@@ -24,7 +24,10 @@ request.interceptors.request.use((config: any) => {
 });
 
 request.interceptors.response.use((response: any) => {
-  const { data, config: { headers } } = response;
+  const {
+    data,
+    config: { headers },
+  } = response;
   switch (data.statusCode) {
     case 0: {
       const token = headers['x-auth-token'];
@@ -32,14 +35,15 @@ request.interceptors.response.use((response: any) => {
         cookie.save('x-auth-token', token, { path: '/' });
       }
       return data.data;
-    };
-    case 400: return Promise.reject(data.data);
+    }
+    case 400:
+      return Promise.reject(data.data);
     case 401: {
       return notification['error']({
         message: data.message,
         description: data.data,
       });
-    };
+    }
   }
 });
 

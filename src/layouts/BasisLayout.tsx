@@ -10,24 +10,18 @@ import styles from './BasisLayout.module.less';
 
 export default function BasisLayout({
   route,
-  children
+  children,
 }: {
-  route: routeProps,
-  children: ReactNode
+  route: routeProps;
+  children: ReactNode;
 }) {
   return (
-    <Layout
-      className={styles.BasisLayout}
-    >
-      <SiderMenu
-        routes={route.children}
-      />
+    <Layout className={styles.BasisLayout}>
+      <SiderMenu routes={route.children} />
       <Layout>
         <HeaderMenu />
         <Layout.Content>
-          <Card className={styles.content}>
-            {children}
-          </Card>
+          <Card className={styles.content}>{children}</Card>
         </Layout.Content>
         <FooterMenu />
       </Layout>

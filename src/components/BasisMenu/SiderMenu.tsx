@@ -5,7 +5,7 @@ import { MyIcon } from '@/utils';
 import { routerProps } from '@/routers/routerConfig';
 import styles from './styles.module.less';
 
-const renderMenu = (routes: routerProps[]) => (
+const renderMenu = (routes: routerProps[]) =>
   routes
     .filter((route: routerProps) => route.name && route.path)
     .map((route: routerProps) => {
@@ -19,7 +19,7 @@ const renderMenu = (routes: routerProps[]) => (
             >
               {renderMenu(route.children)}
             </Menu.SubMenu>
-          )
+          );
         }
         return (
           <Menu.Item
@@ -28,28 +28,25 @@ const renderMenu = (routes: routerProps[]) => (
           >
             <Link to={route.path}>{route.name}</Link>
           </Menu.Item>
-        )
+        );
       }
       return null;
-    })
-)
+    });
 
-export default function SiderMenu({
-  routes,
-}: {
-  routes: routerProps[],
-}) {
+export default function SiderMenu({ routes }: { routes: routerProps[] }) {
   const { pathname } = useLocation();
   const [openKey, setOpenKey] = React.useState<string[]>();
 
   React.useEffect(() => {
-    const openKeys = pathname.split('/').filter(i => i);
-    setOpenKey(openKeys.map((i, index) => `/${openKeys.slice(0, index + 1).join('/')}`));
-  }, [pathname])
+    const openKeys = pathname.split('/').filter((i) => i);
+    setOpenKey(
+      openKeys.map((i, index) => `/${openKeys.slice(0, index + 1).join('/')}`),
+    );
+  }, [pathname]);
 
   const onChangeOpenKeys = (openkeys: any) => {
     setOpenKey(openkeys);
-  }
+  };
 
   return (
     <Layout.Sider className={styles.SiderMenu} collapsed={false}>
@@ -63,6 +60,6 @@ export default function SiderMenu({
       >
         {renderMenu(routes)}
       </Menu>
-    </Layout.Sider >
+    </Layout.Sider>
   );
 }

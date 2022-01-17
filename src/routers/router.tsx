@@ -1,17 +1,22 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { FC, Suspense } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom';
 import routerConfig, { routerProps } from './routerConfig';
 import Loading from '@/components/Loading';
 
 const renderDetail = (pageType: string) => {
   try {
-    require(`@/${pageType}`)
+    require(`@/${pageType}`);
   } catch (err) {
     return require('@/components/NotFount').default;
   }
   return require(`@/${pageType}`).default;
-}
+};
 
 const renderRouter: FC<routerProps[]> = (routers) => {
   if (!Array.isArray(routers)) return null;
@@ -37,20 +42,24 @@ const renderRouter: FC<routerProps[]> = (routers) => {
             path={route.path}
             exact={route.exact}
             strict={route.strict}
-            render={routeProps => {
-              const renderChildRoutes = renderRouter(route.children as routerProps[]);
+            render={(routeProps) => {
+              const renderChildRoutes = renderRouter(
+                route.children as routerProps[],
+              );
               const dynamicDetailRoute = {
                 ...routeProps,
-                children: route.children
-              }
+                children: route.children,
+              };
 
               if (route.component) {
                 const DynamicDetail = renderDetail(route.component);
                 return (
                   <Suspense fallback={<Loading />}>
-                    <DynamicDetail route={dynamicDetailRoute}>{renderChildRoutes}</DynamicDetail>
+                    <DynamicDetail route={dynamicDetailRoute}>
+                      {renderChildRoutes}
+                    </DynamicDetail>
                   </Suspense>
-                )
+                );
               }
 
               return renderChildRoutes;
@@ -59,15 +68,11 @@ const renderRouter: FC<routerProps[]> = (routers) => {
         );
       })}
     </Switch>
-  )
-}
+  );
+};
 
 const RouterComponents: FC = () => {
-  return (
-    <Router>
-      {renderRouter(routerConfig)}
-    </Router>
-  )
-}
+  return <Router>{renderRouter(routerConfig)}</Router>;
+};
 
 export default RouterComponents;

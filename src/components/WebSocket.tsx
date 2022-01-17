@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
-import { getIP } from "@/utils";
+import { getIP } from '@/utils';
 import io from 'socket.io-client';
 import cookie from 'react-cookies';
 import { Modal } from 'antd';
 
-export default function WebSocket({ dataName, callback }: {
+export default function WebSocket({
+  dataName,
+  callback,
+}: {
   dataName: string;
-  callback: (data: any) => any,
+  callback: (data: any) => any;
 }) {
   useEffect((): any => {
     const socket = io(getIP());
@@ -18,11 +21,11 @@ export default function WebSocket({ dataName, callback }: {
       socket.emit('addSocket', { token });
     });
 
-    socket.on(dataName, data => {
+    socket.on(dataName, (data) => {
       callback(JSON.parse(data));
     });
 
-    socket.on("connect_error", () => {
+    socket.on('connect_error', () => {
       if (errTimes === 10) {
         Modal.error({
           title: '连接错误',
@@ -37,9 +40,9 @@ export default function WebSocket({ dataName, callback }: {
 
     return () => {
       socket.emit('delectSocket', { token });
-      socket.close()
+      socket.close();
     };
-  }, [])
+  }, []);
 
   return null;
 }
