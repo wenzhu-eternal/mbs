@@ -2,23 +2,29 @@ const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const CracoAntDesignPlugin = require('craco-antd');
-const CracoLessPlugin = require("craco-less");
-const Jarvis = require("webpack-jarvis");
+const CracoLessPlugin = require('craco-less');
+const Jarvis = require('webpack-jarvis');
 const path = require('path');
+
+function pluginsArr() {
+  var arr = [new HardSourceWebpackPlugin(), new ProgressBarPlugin()];
+  if (process.env.NODE_ENV === 'development') {
+    arr.push(
+      new Jarvis({
+        watchOnly: false,
+        port: 3001,
+      }),
+    );
+  }
+  return arr;
+}
 
 module.exports = {
   webpack: {
     alias: {
-      "@": path.resolve("src"),
+      '@': path.resolve('src'),
     },
-    plugins: [
-      new Jarvis({
-        watchOnly: false,
-        port: 3001
-      }),
-      new HardSourceWebpackPlugin(),
-      new ProgressBarPlugin(),
-    ]
+    plugins: [...pluginsArr()],
   },
   plugins: [
     { plugin: new ReactRefreshPlugin() },
@@ -57,4 +63,4 @@ module.exports = {
       },
     },
   ],
-}
+};
