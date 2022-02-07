@@ -54,6 +54,7 @@
     "postcss-less": "^6.0.0",
     "prettier": "^2.3.2",
     "progress-bar-webpack-plugin": "^2.1.0",
+    "react-error-overlay": "6.0.9",
     "style-loader": "^2.0.0",
     "stylelint": "^14.2.0",
     "stylelint-config-recommended": "^6.0.0",
