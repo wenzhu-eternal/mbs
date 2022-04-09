@@ -1,78 +1,44 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import { FC, Suspense } from 'react';
+import React from "react";
 import {
   BrowserRouter as Router,
+  Routes,
   Route,
-  Switch,
-  Redirect,
-} from 'react-router-dom';
-import routerConfig, { routerProps } from './routerConfig';
+  Navigate
+} from "react-router-dom";
+import routerConfig from './routerConfig';
+
 import Loading from '@/components/Loading';
 
-const renderDetail = (pageType: string) => {
-  try {
-    require(`@/${pageType}`);
-  } catch (err) {
-    return require('@/components/NotFount').default;
-  }
-  return require(`@/${pageType}`).default;
-};
+const modules = import.meta.glob("../**/**.tsx");
 
-const renderRouter: FC<routerProps[]> = (routers) => {
+const renderRouter = (routers: any[]) => {
   if (!Array.isArray(routers)) return null;
 
-  return (
-    <Switch>
-      {routers.map((route, index) => {
-        if (route.redirect) {
-          return (
-            <Redirect
-              key={`${route.path}${index}`}
-              exact={route.exact}
-              strict={route.strict}
-              from={route.path}
-              to={route.redirect}
-            />
-          );
-        }
+  return routers.map((route, index) => {
+    const Compontents = React.lazy(modules[
+      Object.keys(modules).find((i) => i.includes(route.element)) || '../components/NotFount/index.tsx'
+    ] as any);
 
-        return (
-          <Route
-            key={`${route.path}${index}`}
-            path={route.path}
-            exact={route.exact}
-            strict={route.strict}
-            render={(routeProps) => {
-              const renderChildRoutes = renderRouter(
-                route.children as routerProps[],
-              );
-              const dynamicDetailRoute = {
-                ...routeProps,
-                children: route.children,
-              };
+    return route.path ? (
+      <Route
+        key={`${route.path}${index}`}
+        path={route.path}
+        element={route.element && (
+          <React.Suspense fallback={<Loading />}>
+            <Compontents routes={route} />
+          </React.Suspense>
+        )}
+      >
+        {renderRouter(route.children)}
+      </Route>
+    ) : <Route key={`${route.form}${index}`} path={route.form} element={<Navigate to={route.to} />} />
+  })
+}
 
-              if (route.component) {
-                const DynamicDetail = renderDetail(route.component);
-                return (
-                  <Suspense fallback={<Loading />}>
-                    <DynamicDetail route={dynamicDetailRoute}>
-                      {renderChildRoutes}
-                    </DynamicDetail>
-                  </Suspense>
-                );
-              }
-
-              return renderChildRoutes;
-            }}
-          />
-        );
-      })}
-    </Switch>
-  );
-};
-
-const RouterComponents: FC = () => {
-  return <Router>{renderRouter(routerConfig)}</Router>;
-};
-
-export default RouterComponents;
+export default () => (
+  <Router>
+    <Routes>
+      {renderRouter(routerConfig)}
+    </Routes>
+  </Router>
+);

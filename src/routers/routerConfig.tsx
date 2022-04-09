@@ -1,79 +1,68 @@
-import type { RouteChildrenProps } from 'react-router-dom';
+import { ReactNode } from 'react';
 
 export interface routerProps {
-  path: string;
+  path?: string;
   name?: string;
   icon?: string;
-  redirect?: string;
-  exact?: boolean;
-  strict?: boolean;
-  component?: string;
+  form?: string;
+  to?: string;
+  element?: ReactNode;
   children?: Array<routerProps>;
 }
 
-export interface routeProps extends RouteChildrenProps {
+export interface routeProps {
   children: routerProps[];
 }
 
 const routerConfig: routerProps[] = [
   {
     path: '/',
-    component: 'layouts/BlankLayout',
+    element: 'layouts/BlankLayout',
     children: [
       {
         path: '/404',
-        component: 'components/NotFount',
+        element: 'components/NotFount',
       },
       {
         path: '/',
-        component: 'layouts/BasisLayout',
+        element: 'layouts/BasisLayout',
         children: [
           {
             path: '/layout',
             name: '边栏1',
             icon: 'iconhear-full',
-            strict: true,
             children: [
               {
                 path: '/layout/one',
                 name: '边栏1-1',
                 icon: 'iconhear-full',
-                strict: true,
                 children: [
                   {
                     path: '/layout/one/one',
                     name: '边栏1-1',
                     icon: 'iconhear-full',
-                    strict: true,
-                    component: 'pages/home',
+                    element: 'pages/home',
                   },
-                  {
-                    path: '/layout/one',
-                    exact: true,
-                    redirect: '/layout/one/one',
-                  },
-                  { path: '*', exact: true, redirect: '/404' },
                 ],
               },
               {
                 path: '/layout/two',
                 name: '边栏1-2',
-                strict: true,
+                element: 'pages/about',
                 icon: 'iconhear-full',
-                component: 'pages/about',
               },
-              { path: '/layout', exact: true, redirect: '/layout/one' },
-              { path: '*', exact: true, redirect: '/404' },
             ],
           },
           {
             path: '/layout2',
             name: '边栏2',
+            element: 'pages/home',
             icon: 'iconhear-full',
-            component: 'pages/home',
           },
-          { path: '/', exact: true, redirect: '/layout' },
-          { path: '*', exact: true, redirect: '/404' },
+          {
+            form: '/',
+            to: '/layout/one/one'
+          }
         ],
       },
     ],
