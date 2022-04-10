@@ -61,8 +61,8 @@ const routerConfig: routerProps[] = [
           },
           {
             form: '/',
-            to: '/layout/one/one'
-          }
+            to: '/layout/one/one',
+          },
         ],
       },
     ],
