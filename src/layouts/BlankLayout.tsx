@@ -1,5 +1,5 @@
-import { ReactNode, Fragment } from 'react';
+import { Outlet } from 'react-router-dom';
 
-export default function BlankLayout({ children }: { children: ReactNode }) {
-  return <Fragment>{children}</Fragment>;
+export default function BlankLayout() {
+  return <Outlet />;
 }

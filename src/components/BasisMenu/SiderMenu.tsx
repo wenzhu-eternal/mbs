@@ -5,17 +5,17 @@ import { MyIcon } from '@/utils';
 import { routerProps } from '@/routers/routerConfig';
 import styles from './styles.module.less';
 
-const renderMenu = (routes: routerProps[]) =>
+const renderMenu = (routes: routerProps[] | undefined) =>
   routes
-    .filter((route: routerProps) => route.name && route.path)
+    ?.filter((route: routerProps) => route.name && route.path)
     .map((route: routerProps) => {
-      if (route.component || route.children) {
+      if (route.element || route.children) {
         if (route.children) {
           return (
             <Menu.SubMenu
               key={route.path}
               title={route.name}
-              icon={<MyIcon type={route.icon as string} />}
+              icon={route.icon && <MyIcon type={route.icon as string} />}
             >
               {renderMenu(route.children)}
             </Menu.SubMenu>
@@ -24,23 +24,27 @@ const renderMenu = (routes: routerProps[]) =>
         return (
           <Menu.Item
             key={route.path}
-            icon={<MyIcon type={route.icon as string} />}
+            icon={route.icon && <MyIcon type={route.icon as string} />}
           >
-            <Link to={route.path}>{route.name}</Link>
+            <Link to={route.path as string}>{route.name}</Link>
           </Menu.Item>
         );
       }
       return null;
     });
 
-export default function SiderMenu({ routes }: { routes: routerProps[] }) {
+export default function SiderMenu({
+  routes,
+}: {
+  routes: routerProps[] | undefined;
+}) {
   const { pathname } = useLocation();
   const [openKey, setOpenKey] = React.useState<string[]>();
 
   React.useEffect(() => {
     const openKeys = pathname.split('/').filter((i) => i);
     setOpenKey(
-      openKeys.map((i, index) => `/${openKeys.slice(0, index + 1).join('/')}`),
+      openKeys.map((_, index) => `/${openKeys.slice(0, index + 1).join('/')}`),
     );
   }, [pathname]);
 
