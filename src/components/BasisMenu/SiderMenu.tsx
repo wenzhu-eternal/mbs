@@ -33,7 +33,11 @@ const renderMenu = (routes: routerProps[] | undefined) =>
       return null;
     });
 
-export default function SiderMenu({ routes }: { routes: routerProps[] | undefined }) {
+export default function SiderMenu({
+  routes,
+}: {
+  routes: routerProps[] | undefined;
+}) {
   const { pathname } = useLocation();
   const [openKey, setOpenKey] = React.useState<string[]>();
 

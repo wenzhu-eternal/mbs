@@ -1,16 +1,16 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-const path = require('path');
+import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
   css: {
-    preprocessorOptions: { less: { javascriptEnabled: true } }
+    preprocessorOptions: { less: { javascriptEnabled: true } },
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src"),
-    }
+      '@': resolve(__dirname, 'src'),
+    },
   },
   // server: {
   //   https: {
@@ -18,4 +18,4 @@ export default defineConfig({
   //     cert: './localhost+1.pem'
   //   }
   // }
-})
+});
