@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { notification } from 'antd';
-import cookie from 'react-cookies';
 
 export const getIP = () => {
   if (process.env.NODE_ENV === 'production') {
@@ -10,6 +9,7 @@ export const getIP = () => {
 };
 
 const request = axios.create({
+  withCredentials: true,
   baseURL: getIP(),
   headers: {
     'Content-Type': 'application/json',
@@ -18,24 +18,11 @@ const request = axios.create({
   timeout: 3000,
 });
 
-request.interceptors.request.use((config: any) => {
-  config['headers']['x-auth-token'] = cookie.load('x-auth-token');
-  return config;
-});
-
 request.interceptors.response.use((response: any) => {
-  const {
-    data,
-    config: { headers },
-  } = response;
+  const { data } = response;
   switch (data.statusCode) {
-    case 0: {
-      const token = headers['x-auth-token'];
-      if (token) {
-        cookie.save('x-auth-token', token, { path: '/' });
-      }
+    case 0:
       return data.data;
-    }
     case 400:
       return Promise.reject(data.data);
     case 401: {

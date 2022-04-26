@@ -1,24 +1,24 @@
 import { useEffect } from 'react';
 import { getIP } from '@/utils';
 import io from 'socket.io-client';
-import cookie from 'react-cookies';
 import { Modal } from 'antd';
 
 export default function WebSocket({
   dataName,
+  userId,
   callback,
 }: {
   dataName: string;
+  userId?: number;
   callback: (data: any) => any;
 }) {
   useEffect((): any => {
     const socket = io(getIP());
-    const token = cookie.load('x-auth-token');
     let errTimes = 0;
 
     socket.on('connect', () => {
       errTimes = 0;
-      socket.emit('addSocket', { token });
+      socket.emit('addSocket', { userId });
     });
 
     socket.on(dataName, (data) => {
@@ -35,11 +35,11 @@ export default function WebSocket({
         });
       }
       errTimes++;
-      socket.emit('delectSocket', { token });
+      socket.emit('delectSocket', { userId });
     });
 
     return () => {
-      socket.emit('delectSocket', { token });
+      socket.emit('delectSocket', { userId });
       socket.close();
     };
   }, []);
