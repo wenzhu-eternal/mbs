@@ -11,7 +11,7 @@ import styles from './BasisLayout.module.less';
 export default function BasisLayout({ routes }: { routes: routerProps }) {
   return (
     <Layout className={styles.BasisLayout}>
-      <SiderMenu routes={routes.children} />
+      <SiderMenu routes={routes.children as routerProps[]} />
       <Layout>
         <HeaderMenu />
         <Layout.Content>
