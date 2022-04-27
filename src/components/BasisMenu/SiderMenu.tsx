@@ -5,39 +5,28 @@ import { MyIcon } from '@/utils';
 import { routerProps } from '@/routers/routerConfig';
 import styles from './styles.module.less';
 
-const renderMenu = (routes: routerProps[] | undefined) =>
+const renderMenu = (routes: routerProps[]): any =>
   routes
     ?.filter((route: routerProps) => route.name && route.path)
     .map((route: routerProps) => {
       if (route.element || route.children) {
-        if (route.children) {
-          return (
-            <Menu.SubMenu
-              key={route.path}
-              title={route.name}
-              icon={route.icon && <MyIcon type={route.icon as string} />}
-            >
-              {renderMenu(route.children)}
-            </Menu.SubMenu>
-          );
-        }
-        return (
-          <Menu.Item
-            key={route.path}
-            icon={route.icon && <MyIcon type={route.icon as string} />}
-          >
-            <Link to={route.path as string}>{route.name}</Link>
-          </Menu.Item>
-        );
+        return route.children
+          ? {
+              key: route.path,
+              label: route.name,
+              icon: route.icon && <MyIcon type={route.icon as string} />,
+              children: renderMenu(route.children),
+            }
+          : {
+              key: route.path,
+              label: <Link to={route.path as string}>{route.name}</Link>,
+              icon: route.icon && <MyIcon type={route.icon as string} />,
+            };
       }
       return null;
     });
 
-export default function SiderMenu({
-  routes,
-}: {
-  routes: routerProps[] | undefined;
-}) {
+export default function SiderMenu({ routes }: { routes: routerProps[] }) {
   const { pathname } = useLocation();
   const [openKey, setOpenKey] = React.useState<string[]>();
 
@@ -61,9 +50,8 @@ export default function SiderMenu({
         openKeys={openKey}
         selectedKeys={[pathname]}
         onOpenChange={onChangeOpenKeys}
-      >
-        {renderMenu(routes)}
-      </Menu>
+        items={renderMenu(routes)}
+      />
     </Layout.Sider>
   );
 }
