@@ -12,10 +12,11 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
-  // server: {
-  //   https: {
-  //     key: './localhost+1-key.pem',
-  //     cert: './localhost+1.pem'
-  //   }
-  // }
+  server: {
+    port: 3000,
+    // https: {
+    //   key: './localhost+1-key.pem',
+    //   cert: './localhost+1.pem',
+    // },
+  },
 });
