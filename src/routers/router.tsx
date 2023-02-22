@@ -17,8 +17,9 @@ const renderRouter = (routers: any[]) => {
   return routers.map((route, index) => {
     const Compontents = React.lazy(
       modules[
-        Object.keys(modules).find((i) => i.includes(route.element)) ||
-          '../components/NotFount/index.tsx'
+        Object.keys(modules).find((i) =>
+          i.match(`.*${route.element}(/index)?.(ts|tsx)$`),
+        ) || '../components/NotFount/index.tsx'
       ] as any,
     );
 
