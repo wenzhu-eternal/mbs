@@ -19,6 +19,7 @@ export default function WebSocket({
     socket.on('connect', () => {
       errTimes = 0;
       socket.emit('addSocket', { userId });
+      Modal.destroyAll();
     });
 
     socket.on(dataName, (data) => {
