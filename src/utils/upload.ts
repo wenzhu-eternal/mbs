@@ -5,6 +5,9 @@ export default (file: File) => {
   formData.set('file', file);
 
   return request({
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
     url: 'api/file/upload',
     method: 'POST',
     data: formData,
