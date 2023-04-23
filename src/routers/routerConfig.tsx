@@ -54,9 +54,9 @@ const routerConfig: routerProps[] = [
             ],
           },
           {
-            path: '/layout2',
+            path: '/map',
             name: '边栏2',
-            element: 'pages/home',
+            element: 'pages/map',
             icon: 'iconhear-full',
           },
           {
