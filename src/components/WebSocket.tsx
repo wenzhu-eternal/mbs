@@ -36,7 +36,7 @@ export default function WebSocket({
         });
       }
       errTimes++;
-      socket.emit('delectSocket', { userId });
+      if (errTimes === 1) socket.emit('delectSocket', { userId });
     });
 
     return () => {
