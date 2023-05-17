@@ -1,6 +1,6 @@
 import request from './request';
 
-export default (file: File) => {
+export default (file) => {
   const formData = new FormData();
   formData.set('file', file);
 

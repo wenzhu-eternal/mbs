@@ -9,18 +9,18 @@ import routerConfig from './routerConfig';
 
 import Loading from '@/components/Loading';
 
-const modules = import.meta.glob('../**/**.tsx');
+const modules = import.meta.glob('../**/**.jsx');
 
-const renderRouter = (routers: any[]) => {
+const renderRouter = (routers) => {
   if (!Array.isArray(routers)) return null;
 
   return routers.map((route, index) => {
     const Compontents = React.lazy(
       modules[
         Object.keys(modules).find((i) =>
-          i.match(`.*${route.element}(/index)?.(ts|tsx)$`),
-        ) || '../components/NotFount/index.tsx'
-      ] as any,
+          i.match(`.*${route.element}(/index)?.(js|jsx)$`),
+        ) || '../components/NotFount/index.jsx'
+      ],
     );
 
     return route.path ? (
@@ -47,8 +47,10 @@ const renderRouter = (routers: any[]) => {
   });
 };
 
-export default () => (
-  <Router>
-    <Routes>{renderRouter(routerConfig)}</Routes>
-  </Router>
-);
+export default function RouterFC() {
+  return (
+    <Router>
+      <Routes>{renderRouter(routerConfig)}</Routes>
+    </Router>
+  );
+}

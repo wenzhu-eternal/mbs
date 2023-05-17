@@ -1,18 +1,11 @@
 import { useEffect } from 'react';
 import { getIP } from '@/utils';
 import io from 'socket.io-client';
+import PropTypes from 'prop-types';
 import { Modal } from 'antd';
 
-export default function WebSocket({
-  dataName,
-  userId,
-  callback,
-}: {
-  dataName: string;
-  userId?: number;
-  callback: (data: any) => any;
-}) {
-  useEffect((): any => {
+export default function WebSocket({ dataName, userId, callback }) {
+  useEffect(() => {
     const socket = io(getIP());
     let errTimes = 0;
 
@@ -47,3 +40,9 @@ export default function WebSocket({
 
   return null;
 }
+
+WebSocket.propTypes = {
+  dataName: PropTypes.string.isRequired,
+  userId: PropTypes.number,
+  callback: PropTypes.func,
+};

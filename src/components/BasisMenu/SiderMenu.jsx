@@ -2,33 +2,34 @@ import React from 'react';
 import { Layout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import { MyIcon } from '@/utils';
-import { routerProps } from '@/routers/routerConfig';
+import PropTypes from 'prop-types';
+
 import styles from './styles.module.less';
 
-const renderMenu = (routes: routerProps[]): any =>
+const renderMenu = (routes) =>
   routes
-    ?.filter((route: routerProps) => route.name && route.path)
-    .map((route: routerProps) => {
+    ?.filter((route) => route.name && route.path)
+    .map((route) => {
       if (route.element || route.children) {
         return route.children
           ? {
               key: route.path,
               label: route.name,
-              icon: route.icon && <MyIcon type={route.icon as string} />,
+              icon: route.icon && <MyIcon type={route.icon} />,
               children: renderMenu(route.children),
             }
           : {
               key: route.path,
-              label: <Link to={route.path as string}>{route.name}</Link>,
-              icon: route.icon && <MyIcon type={route.icon as string} />,
+              label: <Link to={route.path}>{route.name}</Link>,
+              icon: route.icon && <MyIcon type={route.icon} />,
             };
       }
       return null;
     });
 
-export default function SiderMenu({ routes }: { routes: routerProps[] }) {
+export default function SiderMenu({ routes }) {
   const { pathname } = useLocation();
-  const [openKey, setOpenKey] = React.useState<string[]>();
+  const [openKey, setOpenKey] = React.useState();
 
   React.useEffect(() => {
     const openKeys = pathname.split('/').filter((i) => i);
@@ -37,7 +38,7 @@ export default function SiderMenu({ routes }: { routes: routerProps[] }) {
     );
   }, [pathname]);
 
-  const onChangeOpenKeys = (openkeys: any) => {
+  const onChangeOpenKeys = (openkeys) => {
     setOpenKey(openkeys);
   };
 
@@ -55,3 +56,7 @@ export default function SiderMenu({ routes }: { routes: routerProps[] }) {
     </Layout.Sider>
   );
 }
+
+SiderMenu.propTypes = {
+  routes: PropTypes.array.isRequired,
+};

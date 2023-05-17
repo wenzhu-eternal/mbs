@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -9,6 +9,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      // eslint-disable-next-line no-undef
       '@': resolve(__dirname, 'src'),
     },
   },

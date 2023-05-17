@@ -1,17 +1,17 @@
 import { Card, Layout } from 'antd';
 import { Outlet } from 'react-router-dom';
 
-import { routerProps } from '@/routers/routerConfig';
 import SiderMenu from '@/components/BasisMenu/SiderMenu';
 import HeaderMenu from '@/components/BasisMenu/HeaderMenu';
 import FooterMenu from '@/components/BasisMenu/FooterMenu';
+import PropTypes from 'prop-types';
 
 import styles from './BasisLayout.module.less';
 
-export default function BasisLayout({ routes }: { routes: routerProps }) {
+export default function BasisLayout({ routes }) {
   return (
     <Layout className={styles.BasisLayout}>
-      <SiderMenu routes={routes.children as routerProps[]} />
+      <SiderMenu routes={routes.children} />
       <Layout>
         <HeaderMenu />
         <Layout.Content>
@@ -24,3 +24,7 @@ export default function BasisLayout({ routes }: { routes: routerProps }) {
     </Layout>
   );
 }
+
+BasisLayout.propTypes = {
+  routes: PropTypes.object.isRequired,
+};

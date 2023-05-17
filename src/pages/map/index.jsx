@@ -12,7 +12,7 @@ export default function Map() {
         enableHighAccuracy: true,
       });
 
-      geolocation.getCurrentPosition((_: string, { position }: any) => {
+      geolocation.getCurrentPosition((_, { position }) => {
         const map = new Amap.Map('main', {
           zoom: 15,
           center: [position.lng, position.lat],

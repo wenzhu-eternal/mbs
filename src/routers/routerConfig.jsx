@@ -1,20 +1,4 @@
-import { ReactNode } from 'react';
-
-export interface routerProps {
-  path?: string;
-  name?: string;
-  icon?: string;
-  form?: string;
-  to?: string;
-  element?: ReactNode;
-  children?: Array<routerProps>;
-}
-
-export interface routeProps {
-  children: routerProps[];
-}
-
-const routerConfig: routerProps[] = [
+const routerConfig = [
   {
     path: '/',
     element: 'layouts/BlankLayout',

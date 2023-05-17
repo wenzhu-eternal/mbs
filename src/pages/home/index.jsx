@@ -2,14 +2,14 @@ import { request } from '@/utils';
 import { Button, Divider, Form, Input } from 'antd';
 
 export default function Home() {
-  const onFinish = (values: any) => {
+  const onFinish = (values) => {
     request({
       url: 'api/user/login',
       method: 'POST',
       data: values,
     })
-      .then((res: any) => console.log('res :>> ', res))
-      .catch((err: any) => console.log('err :>> ', err));
+      .then((res) => console.log('res :>> ', res))
+      .catch((err) => console.log('err :>> ', err));
   };
 
   const getData = () => {
@@ -17,8 +17,8 @@ export default function Home() {
       url: 'api/user/findUsers?page=1&pageSize=10',
       method: 'GET',
     })
-      .then((res: any) => console.log('res :>> ', res))
-      .catch((err: any) => console.log('err :>> ', err));
+      .then((res) => console.log('res :>> ', res))
+      .catch((err) => console.log('err :>> ', err));
   };
 
   const loginOut = () => {
@@ -26,8 +26,8 @@ export default function Home() {
       url: 'api/user/loginOut',
       method: 'GET',
     })
-      .then((res: any) => console.log('res :>> ', res))
-      .catch((err: any) => console.log('err :>> ', err));
+      .then((res) => console.log('res :>> ', res))
+      .catch((err) => console.log('err :>> ', err));
   };
 
   return (
