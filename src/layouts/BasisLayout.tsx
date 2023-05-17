@@ -1,7 +1,7 @@
 import { Card, Layout } from 'antd';
 import { Outlet } from 'react-router-dom';
+import type { routerProps } from '@/routers/types.d.ts';
 
-import { routerProps } from '@/routers/routerConfig';
 import SiderMenu from '@/components/BasisMenu/SiderMenu';
 import HeaderMenu from '@/components/BasisMenu/HeaderMenu';
 import FooterMenu from '@/components/BasisMenu/FooterMenu';

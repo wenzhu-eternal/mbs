@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import { MyIcon } from '@/utils';
-import { routerProps } from '@/routers/routerConfig';
+import type { routerProps } from '@/routers/types.d.ts';
 import styles from './styles.module.less';
 
 const renderMenu = (routes: routerProps[]): any =>

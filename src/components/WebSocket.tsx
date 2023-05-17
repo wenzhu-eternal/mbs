@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { getIP } from '@/utils';
 import io from 'socket.io-client';
 import { Modal } from 'antd';
 
@@ -13,7 +12,7 @@ export default function WebSocket({
   callback: (data: any) => any;
 }) {
   useEffect((): any => {
-    const socket = io(getIP());
+    const socket = io(__CONFIG__.IP[import.meta.env.MODE]);
     let errTimes = 0;
 
     socket.on('connect', () => {

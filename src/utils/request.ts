@@ -1,16 +1,9 @@
 import axios from 'axios';
 import { notification } from 'antd';
 
-export const getIP = () => {
-  if (process.env.NODE_ENV === 'production') {
-    return '';
-  }
-  return 'http://localhost:9000/';
-};
-
 const request = axios.create({
   withCredentials: true,
-  baseURL: getIP(),
+  baseURL: __CONFIG__.IP[import.meta.env.MODE],
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',

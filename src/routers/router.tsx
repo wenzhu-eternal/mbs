@@ -5,7 +5,6 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import routerConfig from './routerConfig';
 
 import Loading from '@/components/Loading';
 
@@ -49,6 +48,6 @@ const renderRouter = (routers: any[]) => {
 
 export default () => (
   <Router>
-    <Routes>{renderRouter(routerConfig)}</Routes>
+    <Routes>{renderRouter(__CONFIG__.routers)}</Routes>
   </Router>
 );
