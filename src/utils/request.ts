@@ -11,7 +11,7 @@ const request = axios.create({
   timeout: 3000,
 });
 
-request.interceptors.response.use((response: any) => {
+request.interceptors.response.use((response) => {
   const { data } = response;
   switch (data.statusCode) {
     case 0:

@@ -5,12 +5,12 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-
 import Loading from '@/components/Loading';
+import { routerProps } from './types';
 
 const modules = import.meta.glob('../**/**.tsx');
 
-const renderRouter = (routers: any[]) => {
+const renderRouter = (routers?: routerProps[]) => {
   if (!Array.isArray(routers)) return null;
 
   return routers.map((route, index) => {
@@ -46,8 +46,10 @@ const renderRouter = (routers: any[]) => {
   });
 };
 
-export default () => (
+const RouterComponents = () => (
   <Router>
     <Routes>{renderRouter(__CONFIG__.routers)}</Routes>
   </Router>
 );
+
+export default RouterComponents;

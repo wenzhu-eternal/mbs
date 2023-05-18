@@ -1,15 +1,15 @@
 import { request } from '@/utils';
-import { Button, Divider, Form, Input } from 'antd';
+import { Button, Divider, Form, Input, Modal, message } from 'antd';
 
 export default function Home() {
-  const onFinish = (values: any) => {
+  const onFinish = (values: unknown) => {
     request({
       url: 'api/user/login',
       method: 'POST',
       data: values,
     })
-      .then((res: any) => console.log('res :>> ', res))
-      .catch((err: any) => console.log('err :>> ', err));
+      .then(() => message.success('登陆成功！'))
+      .catch((err: unknown) => message.error('登陆失败' + err));
   };
 
   const getData = () => {
@@ -17,8 +17,12 @@ export default function Home() {
       url: 'api/user/findUsers?page=1&pageSize=10',
       method: 'GET',
     })
-      .then((res: any) => console.log('res :>> ', res))
-      .catch((err: any) => console.log('err :>> ', err));
+      .then((res: unknown) =>
+        Modal.success({
+          content: JSON.stringify(res),
+        }),
+      )
+      .catch((err: unknown) => message.error('获取失败' + err));
   };
 
   const loginOut = () => {
@@ -26,8 +30,8 @@ export default function Home() {
       url: 'api/user/loginOut',
       method: 'GET',
     })
-      .then((res: any) => console.log('res :>> ', res))
-      .catch((err: any) => console.log('err :>> ', err));
+      .then(() => message.success('登出成功！'))
+      .catch((err: unknown) => message.error('登出失败' + err));
   };
 
   return (

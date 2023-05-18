@@ -12,19 +12,24 @@ export default function Map() {
         enableHighAccuracy: true,
       });
 
-      geolocation.getCurrentPosition((_: string, { position }: any) => {
-        const map = new Amap.Map('main', {
-          zoom: 15,
-          center: [position.lng, position.lat],
-        });
+      geolocation.getCurrentPosition(
+        (
+          _: string,
+          { position }: { position: { lng: string; lat: string } },
+        ) => {
+          const map = new Amap.Map('main', {
+            zoom: 15,
+            center: [position.lng, position.lat],
+          });
 
-        const marker = new Amap.Marker({
-          position: new Amap.LngLat(position.lng, position.lat),
-          title: '当前位置',
-        });
+          const marker = new Amap.Marker({
+            position: new Amap.LngLat(position.lng, position.lat),
+            title: '当前位置',
+          });
 
-        map.add(marker);
-      });
+          map.add(marker);
+        },
+      );
     });
   }, []);
 

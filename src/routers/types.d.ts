@@ -5,7 +5,7 @@ declare interface routerProps {
   name?: string;
   icon?: string;
   form?: string;
-  to?: string;
+  to: string;
   element?: ReactNode;
   children?: Array<routerProps>;
 }

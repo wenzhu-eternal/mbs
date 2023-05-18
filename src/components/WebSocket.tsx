@@ -9,9 +9,9 @@ export default function WebSocket({
 }: {
   dataName: string;
   userId?: number;
-  callback: (data: any) => any;
+  callback: (data: unknown) => void;
 }) {
-  useEffect((): any => {
+  useEffect(() => {
     const socket = io(__CONFIG__.IP[import.meta.env.MODE]);
     let errTimes = 0;
 
@@ -42,6 +42,7 @@ export default function WebSocket({
       socket.emit('delectSocket', { userId });
       socket.close();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null;

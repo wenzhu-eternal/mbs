@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import { MyIcon } from '@/utils';
-import type { routerProps } from '@/routers/types.d.ts';
+import type { routerProps } from '@/routers/types';
 
 import styles from './styles.module.less';
 
@@ -38,7 +38,7 @@ export default function SiderMenu({ routes }: { routes: routerProps[] }) {
     );
   }, [pathname]);
 
-  const onChangeOpenKeys = (openkeys: any) => {
+  const onChangeOpenKeys = (openkeys: string[]) => {
     setOpenKey(openkeys);
   };
 
