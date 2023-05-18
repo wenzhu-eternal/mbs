@@ -1,5 +1,6 @@
-import styles from './style.module.less';
 import cn from 'classnames';
+
+import styles from './style.module.less';
 
 export default function Loading() {
   return (
