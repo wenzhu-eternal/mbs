@@ -1,22 +1,17 @@
-import { request } from '@/utils';
+import { userService } from '@/services';
 import { Button, Divider, Form, Input, Modal, message } from 'antd';
 
 export default function Home() {
   const onFinish = (values: unknown) => {
-    request({
-      url: 'api/user/login',
-      method: 'POST',
-      data: values,
-    })
+    userService
+      .login(values as any)
       .then(() => message.success('登陆成功！'))
       .catch((err: unknown) => message.error('登陆失败' + err));
   };
 
   const getData = () => {
-    request({
-      url: 'api/user/findUsers?page=1&pageSize=10',
-      method: 'GET',
-    })
+    userService
+      .findUsers({ page: 1, pageSize: 10 })
       .then((res: unknown) =>
         Modal.success({
           content: JSON.stringify(res),
@@ -26,10 +21,8 @@ export default function Home() {
   };
 
   const loginOut = () => {
-    request({
-      url: 'api/user/loginOut',
-      method: 'GET',
-    })
+    userService
+      .loginOut()
       .then(() => message.success('登出成功！'))
       .catch((err: unknown) => message.error('登出失败' + err));
   };

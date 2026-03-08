@@ -21,6 +21,7 @@ MBS 是一个基于 React 18 + TypeScript + Vite + Ant Design 的中后台管理
 - ✅ 后台基础布局（侧边栏 + 头部 + 内容区 + 底部）
 - ✅ 动态路由 + 动态菜单（统一由 `config.ts` 配置）
 - ✅ Axios 请求封装（含统一返回码处理）
+- ✅ 接口服务管理（按业务维度划分）
 - ✅ Socket.io WebSocket 示例
 - ✅ 高德地图定位示例
 - ✅ 统一时间处理工具
@@ -101,6 +102,10 @@ mbs/
 │   │   ├── about/          # WebSocket 示例
 │   │   └── map/            # 高德地图示例
 │   ├── routers/             # 路由配置
+│   ├── services/            # 接口服务
+│   │   ├── user.service.ts # 用户相关接口
+│   │   ├── file.service.ts # 文件上传接口
+│   │   └── index.ts       # 统一导出
 │   ├── utils/               # 工具函数
 │   ├── index.tsx            # 应用入口
 │   └── index.less           # 全局样式
@@ -109,8 +114,9 @@ mbs/
 ├── package.json             # 项目依赖
 ├── tsconfig.json            # TypeScript 配置
 ├── vite.config.ts           # Vite 配置
-├── MAINTAIN.md              # 维护文档
-└── README.md                # 本文档
+├── docs/                   # 文档目录
+│   └── MAINTAIN.md      # 维护文档
+├── README.md                # 本文档
 ```
 
 ## 🔧 配置说明
@@ -121,7 +127,7 @@ mbs/
 
 ```typescript
 const IP = {
-  development: 'http://localhost:9000/',  // 开发环境
+  development: 'http://localhost:9000/', // 开发环境
   production: 'https://api.example.com/', // 生产环境
 };
 ```
@@ -132,7 +138,7 @@ const IP = {
 
 ```typescript
 AMapLoader.load({
-  key: 'your-amap-key',  // 替换为你的高德地图 Key
+  key: 'your-amap-key', // 替换为你的高德地图 Key
   // ...
 });
 ```
@@ -149,6 +155,20 @@ AMapLoader.load({
 - 运行 & 配置
 - 开发规范
 - 常见问题
+
+### 接口服务使用
+
+项目采用按业务维度划分的接口服务架构，所有接口集中在 `src/services/` 目录下：
+
+```typescript
+import { userService } from '@/services';
+
+userService.login({ account, password });
+userService.findUsers({ page: 1, pageSize: 10 });
+userService.loginOut();
+```
+
+详细的接口服务说明请参考 [docs/MAINTAIN.md](./docs/MAINTAIN.md) 的"5.3 接口服务"章节。
 
 ## 🛠️ 开发命令
 
@@ -204,6 +224,6 @@ pnpm format
 
 ---
 
-**版本**: 0.4.4  
+**版本**: 0.4.5  
 **最后更新**: 2026-03-08  
 **维护者**: Development Team

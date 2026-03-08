@@ -25,7 +25,7 @@
 - **开发语言**: TypeScript
 - **框架**: React 18.3.1 + Vite 4.5.14
 - **UI 框架**: Ant Design 5.29.3
-- **版本**: 0.4.4
+- **版本**: 1.0.0
 
 ---
 
@@ -92,6 +92,10 @@ mbs/
 │   ├── routers/             # 路由配置
 │   │   ├── router.tsx      # 路由渲染
 │   │   └── types.d.ts      # 类型定义
+│   ├── services/            # 接口服务
+│   │   ├── user.service.ts # 用户相关接口
+│   │   ├── file.service.ts # 文件上传接口
+│   │   └── index.ts       # 统一导出
 │   ├── utils/               # 工具函数
 │   │   ├── request.ts      # Axios 封装
 │   │   ├── upload.ts       # 文件上传
@@ -196,6 +200,20 @@ mbs/
 
 - **[src/utils/index.ts](../src/utils/index.ts)**: 工具统一导出
 
+### 接口服务
+
+- **[src/services/user.service.ts](../src/services/user.service.ts)**: 用户相关接口
+
+  - `login()`: 用户登录
+  - `loginOut()`: 用户登出
+  - `findUsers()`: 查询用户列表
+
+- **[src/services/file.service.ts](../src/services/file.service.ts)**: 文件上传接口
+
+  - `upload()`: 上传文件
+
+- **[src/services/index.ts](../src/services/index.ts)**: 服务统一导出
+
 ### 示例页面
 
 - **[src/pages/home/index.tsx](../src/pages/home/index.tsx)**: 接口示例
@@ -253,7 +271,7 @@ mbs/
 
 - `0`: 业务成功
 - `400`: 业务错误，直接 `reject`
-- `401`: 未授权，弹出提示
+- `401`: 未授权，弹出提示 + 自动跳转登录页
 
 **使用示例**:
 
@@ -264,7 +282,34 @@ request.get('/api/user/info');
 request.post('/api/user/login', { account, password });
 ```
 
-### 5.3 WebSocket 通信
+### 5.3 接口服务（Services）
+
+**设计理念**:
+
+- 按业务维度划分接口服务（如 `user.service.ts`、`file.service.ts`）
+- 统一管理接口请求，避免重复代码
+- 提供完整的 TypeScript 类型定义
+
+**使用方式**:
+
+```typescript
+import { userService } from '@/services';
+
+userService.login({ account, password });
+userService.findUsers({ page: 1, pageSize: 10 });
+userService.loginOut();
+```
+
+**文件结构**:
+
+```
+src/services/
+├── user.service.ts  # 用户相关接口
+├── file.service.ts  # 文件上传接口
+└── index.ts        # 统一导出
+```
+
+### 5.4 WebSocket 通信
 
 **实现方式**:
 
@@ -280,7 +325,7 @@ import WebSocket from '@/components/WebSocket';
 <WebSocket url="ws://localhost:9000" />;
 ```
 
-### 5.4 时间处理工具
+### 5.5 时间处理工具
 
 **可用函数**:
 
@@ -296,23 +341,21 @@ const currentTime = now();
 const isoTime = formatIsoTime(currentTime);
 ```
 
-### 5.5 权限控制
+### 5.6 权限控制
 
 **当前实现**:
 
 - 依赖 Cookie（`withCredentials: true`）
-- 后端返回码：`401` 弹出未授权提示
+- 后端返回码：`401` 弹出未授权提示 + 自动跳转登录页
 - 无前端路由守卫
 
 **扩展方向**:
 
-1. 在 [src/utils/request.ts](../src/utils/request.ts) 拦截器中：
-   - 收到 401 时清理登录态 + 重定向到登录页
-2. 在路由配置中添加权限字段：
+1. 在路由配置中添加权限字段：
    - `roles?: string[]`
-3. 在菜单和路由渲染中根据角色过滤
+2. 在菜单和路由渲染中根据角色过滤
 
-### 5.6 高德地图集成
+### 5.7 高德地图集成
 
 **实现方式**:
 
@@ -480,6 +523,6 @@ const IP = {
 
 ---
 
-**文档版本**: 1.0.0  
+**文档版本**: 1.1.0  
 **最后更新**: 2026-03-08  
 **维护者**: Development Team
