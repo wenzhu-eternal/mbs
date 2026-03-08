@@ -22,7 +22,7 @@ const defaultConfig = (
   return JSON.stringify({
     ...config,
     IP: {
-      ...config,
+      ...config.IP,
       development: config?.IP?.development || 'http://localhost:9000/',
     },
   });
