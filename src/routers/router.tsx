@@ -15,12 +15,16 @@ const renderRouter = (routers?: routerProps[]) => {
 
   return routers.map((route, index) => {
     const Compontents = React.lazy(
-      modules[
-        Object.keys(modules).find((i) =>
-          i.match(`.*${route.element}(/index)?.(ts|tsx)$`),
-        ) || '../components/NotFount/index.tsx'
-      ] as any,
+      () =>
+        modules[
+          Object.keys(modules).find((i) =>
+            i.match(`.*${route.element}(/index)?.(ts|tsx)$`),
+          ) || '../components/NotFount/index.tsx'
+        ]() as Promise<{ default: React.ComponentType<unknown> }>,
     );
+
+    // 判断是否为布局组件，只有布局组件需要 routes 属性
+    const isLayoutComponent = String(route.element).includes('layouts/');
 
     return route.path ? (
       <Route
@@ -29,20 +33,25 @@ const renderRouter = (routers?: routerProps[]) => {
         element={
           route.element && (
             <React.Suspense fallback={<Loading />}>
-              <Compontents routes={route} />
+              {isLayoutComponent ? (
+                // 使用类型断言来传递 routes 属性
+                React.createElement(Compontents, { routes: route } as any)
+              ) : (
+                <Compontents />
+              )}
             </React.Suspense>
           )
         }
       >
         {renderRouter(route.children)}
       </Route>
-    ) : (
+    ) : route.to ? (
       <Route
         key={`${route.form}${index}`}
         path={route.form}
         element={<Navigate to={route.to} />}
       />
-    );
+    ) : null;
   });
 };
 
