@@ -1,9 +1,9 @@
+import { notification } from 'antd';
 import axios, {
   AxiosError,
   AxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
-import { notification } from 'antd';
 
 interface CustomResponse<T = unknown> {
   statusCode?: number;
@@ -22,6 +22,7 @@ const axiosInstance = axios.create({
 });
 
 // 这里通过类型断言绕过 Axios 对拦截器返回值的严格约束，便于直接返回业务 data
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (axiosInstance.interceptors.response as any).use(
   (response: AxiosResponse<CustomResponse>) => {
     const { data } = response;

@@ -1,11 +1,13 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { Layout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
-import { MyIcon } from '@/utils';
+
 import type { routerProps } from '@/routers/types';
+import { MyIcon } from '@/utils';
 
 import styles from './styles.module.less';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderMenu = (routes: routerProps[]): any =>
   routes
     ?.filter((route: routerProps) => route.name && route.path)
@@ -29,9 +31,9 @@ const renderMenu = (routes: routerProps[]): any =>
 
 export default function SiderMenu({ routes }: { routes: routerProps[] }) {
   const { pathname } = useLocation();
-  const [openKey, setOpenKey] = React.useState<string[]>();
+  const [openKey, setOpenKey] = useState<string[]>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const openKeys = pathname.split('/').filter((i) => i);
     setOpenKey(
       openKeys.map((_, index) => `/${openKeys.slice(0, index + 1).join('/')}`),

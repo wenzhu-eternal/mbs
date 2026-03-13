@@ -1,10 +1,11 @@
 import { Card, Layout } from 'antd';
 import { Outlet } from 'react-router-dom';
+
+import FooterMenu from '@/components/BasisMenu/FooterMenu';
+import HeaderMenu from '@/components/BasisMenu/HeaderMenu';
+import SiderMenu from '@/components/BasisMenu/SiderMenu';
 import type { routerProps } from '@/routers/types.d.ts';
 
-import SiderMenu from '@/components/BasisMenu/SiderMenu';
-import HeaderMenu from '@/components/BasisMenu/HeaderMenu';
-import FooterMenu from '@/components/BasisMenu/FooterMenu';
 
 import styles from './BasisLayout.module.less';
 

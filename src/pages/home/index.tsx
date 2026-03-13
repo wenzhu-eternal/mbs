@@ -1,10 +1,11 @@
-import { userService } from '@/services';
 import { Button, Divider, Form, Input, Modal, message } from 'antd';
 
+import { userService, type LoginParams } from '@/services';
+
 export default function Home() {
-  const onFinish = (values: unknown) => {
+  const onFinish = (values: LoginParams) => {
     userService
-      .login(values as any)
+      .login(values)
       .then(() => message.success('登陆成功！'))
       .catch((err: unknown) => message.error('登陆失败' + err));
   };
@@ -12,7 +13,7 @@ export default function Home() {
   const getData = () => {
     userService
       .findUsers({ page: 1, pageSize: 10 })
-      .then((res: unknown) =>
+      .then((res) =>
         Modal.success({
           content: JSON.stringify(res),
         }),

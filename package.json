@@ -6,7 +6,9 @@
   "scripts": {
     "prepare": "rm -rf .husky && husky install && husky add .husky/pre-commit \"npx lint-staged\" && husky add .husky/pre-push \"npm run ci:deploy\"",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "npm run lint && tsc && vite build",
+    "lint": "eslint src --ext .ts,.tsx --max-warnings 0",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "ci:init": "mb-ci init",
     "ci:deploy": "mb-ci deploy"
   },
@@ -31,6 +33,8 @@
     "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "eslint": "^8.57.1",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.1",
     "husky": "^8.0.3",

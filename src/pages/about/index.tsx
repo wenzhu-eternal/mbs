@@ -6,7 +6,9 @@ export default function About() {
       <WebSocket
         dataName="wsData"
         userId={1}
-        callback={(data) => console.log('data :>> ', data)}
+        callback={(data) => {
+          console.warn('WebSocket data received:', data);
+        }}
       />
       WebSocket
     </h2>

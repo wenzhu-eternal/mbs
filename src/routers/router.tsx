@@ -1,11 +1,13 @@
-import React from 'react';
+import { lazy, createElement, Suspense } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from 'react-router-dom';
+
 import Loading from '@/components/Loading';
+
 import { routerProps } from './types';
 
 const modules = import.meta.glob('../**/**.tsx');
@@ -14,7 +16,7 @@ const renderRouter = (routers?: routerProps[]) => {
   if (!Array.isArray(routers)) return null;
 
   return routers.map((route, index) => {
-    const Compontents = React.lazy(
+    const Compontents = lazy(
       () =>
         modules[
           Object.keys(modules).find((i) =>
@@ -32,14 +34,17 @@ const renderRouter = (routers?: routerProps[]) => {
         path={route.path}
         element={
           route.element && (
-            <React.Suspense fallback={<Loading />}>
+            <Suspense fallback={<Loading />}>
               {isLayoutComponent ? (
                 // 使用类型断言来传递 routes 属性
-                React.createElement(Compontents, { routes: route } as any)
+                createElement(
+                  Compontents as React.ComponentType<{ routes: routerProps }>,
+                  { routes: route },
+                )
               ) : (
                 <Compontents />
               )}
-            </React.Suspense>
+            </Suspense>
           )
         }
       >

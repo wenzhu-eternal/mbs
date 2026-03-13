@@ -1,9 +1,9 @@
-import AMapLoader from '@amap/amap-jsapi-loader';
 import { useEffect } from 'react';
+import { load } from '@amap/amap-jsapi-loader';
 
 export default function Map() {
   useEffect(() => {
-    AMapLoader.load({
+    load({
       key: 'f622d8e768c45b319da3752cb9efe839',
       version: '2.0',
       plugins: ['AMap.Geolocation'],

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import io from 'socket.io-client';
 import { Modal } from 'antd';
+import io from 'socket.io-client';
 
 export default function WebSocket({
   dataName,
