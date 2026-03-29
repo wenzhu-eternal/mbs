@@ -1,18 +1,37 @@
-import { Button, Divider, Form, Input, Modal, message } from 'antd';
+import { Button, Modal, message } from 'antd';
 
-import { userService, type LoginParams } from '@/services';
+import { request } from '@/utils';
+
+export interface User {
+  id: number;
+  account: string;
+  phone?: string;
+  email?: string;
+  roleId?: number;
+  role?: {
+    id: number;
+    name: string;
+  };
+  createTime: string;
+  updateTime: string;
+  lastLoginTime?: string;
+  isDisable: boolean;
+}
+
+export interface FindUsersResponse {
+  list: User[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
 
 export default function Home() {
-  const onFinish = (values: LoginParams) => {
-    userService
-      .login(values)
-      .then(() => message.success('登陆成功！'))
-      .catch((err: unknown) => message.error('登陆失败' + err));
-  };
-
   const getData = () => {
-    userService
-      .findUsers({ page: 1, pageSize: 10 })
+    request<FindUsersResponse>({
+      url: 'api/user/findUsers',
+      method: 'GET',
+      params: { page: 1, pageSize: 10 },
+    })
       .then((res) =>
         Modal.success({
           content: JSON.stringify(res),
@@ -21,42 +40,9 @@ export default function Home() {
       .catch((err: unknown) => message.error('获取失败' + err));
   };
 
-  const loginOut = () => {
-    userService
-      .loginOut()
-      .then(() => message.success('登出成功！'))
-      .catch((err: unknown) => message.error('登出失败' + err));
-  };
-
   return (
     <div>
-      <Form name="basic" onFinish={onFinish}>
-        <Form.Item
-          label="account"
-          name="account"
-          rules={[{ required: true, message: 'please input your account!' }]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="password"
-          name="password"
-          rules={[{ required: true, message: 'please input your password!' }]}
-        >
-          <Input.Password />
-        </Form.Item>
-
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            登录
-          </Button>
-        </Form.Item>
-      </Form>
-
       <Button onClick={getData}>查询数据</Button>
-      <Divider type="vertical" />
-      <Button onClick={loginOut}>退出登录</Button>
     </div>
   );
 }

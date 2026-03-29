@@ -46,21 +46,11 @@ module.exports = {
             position: 'before',
           },
           {
-            pattern: 'react-dom/**',
-            group: 'external',
-            position: 'after',
-          },
-          {
             pattern: '@/**',
             group: 'internal',
           },
-          {
-            pattern: '*.+(css|less|scss|sass)',
-            group: 'external',
-            position: 'after',
-          },
         ],
-        pathGroupsExcludedImportTypes: ['react', 'css', 'less', 'scss', 'sass'],
+        pathGroupsExcludedImportTypes: ['react'],
         distinctGroup: false,
       },
     ],
@@ -69,6 +59,7 @@ module.exports = {
     'import/no-cycle': 'warn',
     'import/no-unused-modules': 'warn',
     'import/no-named-as-default': 'off',
+    'import/default': 'off',
     '@typescript-eslint/no-unused-vars': [
       'error',
       {
@@ -86,4 +77,16 @@ module.exports = {
     'prefer-const': 'error',
     'no-var': 'error',
   },
+  overrides: [
+    {
+      files: [
+        'src/test/**/*.{ts,tsx}',
+        'src/**/*.test.{ts,tsx}',
+        'src/**/*.spec.{ts,tsx}',
+      ],
+      rules: {
+        'react-refresh/only-export-components': 'off',
+      },
+    },
+  ],
 };

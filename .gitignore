@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Test coverage
+coverage
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -26,5 +29,4 @@ dist-ssr
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
-.husky
 mbci.config.js

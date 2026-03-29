@@ -1,15 +1,38 @@
-import { notification } from 'antd';
+import { message } from 'antd';
 import axios, {
   AxiosError,
   AxiosRequestConfig,
   AxiosResponse,
+  InternalAxiosRequestConfig,
 } from 'axios';
+
+import { useAuthStore } from '@/store/authStore';
+
+import {
+  mapStatusCodeToErrorCode,
+  createAppError,
+  showErrorNotification,
+} from './errorHandler';
 
 interface CustomResponse<T = unknown> {
   statusCode?: number;
   data?: T;
   message?: string;
 }
+
+interface RequestConfig extends AxiosRequestConfig {
+  skipAuth?: boolean;
+  skipError?: boolean;
+  showLoading?: boolean;
+  showError?: boolean;
+}
+
+const pendingRequests = new Map<string, AbortController>();
+
+const generateRequestKey = (config: InternalAxiosRequestConfig): string => {
+  const { method, url, params, data } = config;
+  return [method, url, JSON.stringify(params), JSON.stringify(data)].join('&');
+};
 
 const axiosInstance = axios.create({
   withCredentials: true,
@@ -18,62 +41,136 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
-  timeout: 3000,
+  timeout: 10000,
 });
 
-// 这里通过类型断言绕过 Axios 对拦截器返回值的严格约束，便于直接返回业务 data
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(axiosInstance.interceptors.response as any).use(
+axiosInstance.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    const requestConfig = config as RequestConfig;
+
+    if (requestConfig.showLoading) {
+      message.loading({
+        content: '加载中...',
+        key: 'global-loading',
+        duration: 0,
+      });
+    }
+
+    return config;
+  },
+  (error: AxiosError) => {
+    return Promise.reject(error);
+  },
+);
+
+axiosInstance.interceptors.response.use(
   (response: AxiosResponse<CustomResponse>) => {
+    const requestConfig = response.config as RequestConfig;
+    const requestKey = generateRequestKey(
+      requestConfig as InternalAxiosRequestConfig,
+    );
+    pendingRequests.delete(requestKey);
+
+    if (requestConfig.showLoading) {
+      message.destroy('global-loading');
+    }
+
     const { data } = response;
     const statusCode = data?.statusCode;
 
     switch (statusCode) {
       case 0:
-        return data?.data as unknown;
+        return response;
       case 400:
-        return Promise.reject(data?.data);
-      case 401: {
-        notification.error({
-          message: data?.message || '未授权或登录失效',
-          description: data?.data as string,
-        });
-
-        // 简单的前端“登录守卫”：收到 401 时统一跳回登录页
-        const loginPath = '/layout/one/one';
-        if (window.location.pathname !== loginPath) {
-          window.setTimeout(() => {
-            window.location.href = loginPath;
-          }, 0);
+      case 401:
+      case 403:
+      case 404:
+      case 500: {
+        if (!requestConfig.skipError) {
+          const errorCode = mapStatusCodeToErrorCode(statusCode);
+          const appError = createAppError(errorCode, data?.message);
+          showErrorNotification(appError);
         }
-
-        return Promise.reject(data?.data);
+        if (statusCode === 401) {
+          useAuthStore.getState().logout();
+          const loginPath = '/login';
+          if (window.location.pathname !== loginPath) {
+            window.location.href = `${loginPath}?redirect=${encodeURIComponent(
+              window.location.pathname,
+            )}`;
+          }
+        }
+        return Promise.reject(data?.message);
       }
       default:
-        // 未约定的返回码：统一走错误提示，方便排查
-        if (statusCode !== undefined) {
-          notification.error({
-            message: '请求失败',
-            description: data?.message || `状态码：${statusCode}`,
-          });
+        if (statusCode !== undefined && !requestConfig.skipError) {
+          const errorCode = mapStatusCodeToErrorCode(statusCode);
+          const appError = createAppError(errorCode, data?.message);
+          showErrorNotification(appError);
         }
         return Promise.reject(data);
     }
   },
   (error: AxiosError) => {
-    notification.error({
-      message: '网络异常',
-      description:
-        error.message || '网络请求失败，请检查网络连接或稍后重试。',
-    });
+    const requestConfig = error.config as RequestConfig;
+    if (requestConfig) {
+      const requestKey = generateRequestKey(
+        requestConfig as InternalAxiosRequestConfig,
+      );
+      pendingRequests.delete(requestKey);
+    }
+
+    if (requestConfig?.showLoading) {
+      message.destroy('global-loading');
+    }
+
+    if (axios.isCancel(error)) {
+      return Promise.reject({ message: '请求已取消' });
+    }
+
+    if (!requestConfig?.skipError) {
+      let errorCode = mapStatusCodeToErrorCode(0);
+
+      if (error.code === 'ECONNABORTED') {
+        errorCode = mapStatusCodeToErrorCode(408);
+      } else if (!error.response) {
+        errorCode = mapStatusCodeToErrorCode(0);
+      } else {
+        errorCode = mapStatusCodeToErrorCode(error.response.status);
+      }
+
+      const appError = createAppError(errorCode, error.message);
+      showErrorNotification(appError);
+    }
+
     return Promise.reject(error);
   },
 );
 
-export function request<T = unknown>(
-  config: AxiosRequestConfig,
-): Promise<T> {
-  return axiosInstance(config) as Promise<T>;
+export function request<T = unknown>(config: RequestConfig): Promise<T> {
+  return axiosInstance(config).then((response) => {
+    const data = response.data as CustomResponse<T>;
+    if (data.statusCode === 0) {
+      return data.data as T;
+    }
+    if ('success' in data) {
+      return data as T;
+    }
+    return Promise.reject(data);
+  });
+}
+
+export function cancelRequest(requestKey?: string) {
+  if (requestKey) {
+    const controller = pendingRequests.get(requestKey);
+    if (controller) {
+      controller.abort();
+      pendingRequests.delete(requestKey);
+    }
+  } else {
+    pendingRequests.forEach((controller) => controller.abort());
+    pendingRequests.clear();
+  }
 }
 
 export default request;

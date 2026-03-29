@@ -1,4 +1,4 @@
-import { lazy, createElement, Suspense } from 'react';
+import React, { createElement, lazy } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -6,26 +6,29 @@ import {
   Navigate,
 } from 'react-router-dom';
 
+import AuthGuard from '@/components/AuthGuard';
 import Loading from '@/components/Loading';
 
 import { routerProps } from './types';
 
-const modules = import.meta.glob('../**/**.tsx');
+const modules = import.meta.glob('../../**/**.tsx');
 
 const renderRouter = (routers?: routerProps[]) => {
   if (!Array.isArray(routers)) return null;
 
   return routers.map((route, index) => {
+    const modulePath =
+      Object.keys(modules).find((i) =>
+        i.match(`.*${route.element}(/index)?.(ts|tsx)$`),
+      ) || '../../components/NotFound/index.tsx';
+
     const Compontents = lazy(
       () =>
-        modules[
-          Object.keys(modules).find((i) =>
-            i.match(`.*${route.element}(/index)?.(ts|tsx)$`),
-          ) || '../components/NotFount/index.tsx'
-        ]() as Promise<{ default: React.ComponentType<unknown> }>,
+        modules[modulePath]() as Promise<{
+          default: React.ComponentType<unknown>;
+        }>,
     );
 
-    // 判断是否为布局组件，只有布局组件需要 routes 属性
     const isLayoutComponent = String(route.element).includes('layouts/');
 
     return route.path ? (
@@ -34,17 +37,17 @@ const renderRouter = (routers?: routerProps[]) => {
         path={route.path}
         element={
           route.element && (
-            <Suspense fallback={<Loading />}>
-              {isLayoutComponent ? (
-                // 使用类型断言来传递 routes 属性
-                createElement(
-                  Compontents as React.ComponentType<{ routes: routerProps }>,
-                  { routes: route },
-                )
-              ) : (
-                <Compontents />
-              )}
-            </Suspense>
+            <AuthGuard>
+              <React.Suspense fallback={<Loading />}>
+                {isLayoutComponent ? (
+                  createElement(Compontents, {
+                    routes: route,
+                  } as unknown as React.Attributes)
+                ) : (
+                  <Compontents />
+                )}
+              </React.Suspense>
+            </AuthGuard>
           )
         }
       >

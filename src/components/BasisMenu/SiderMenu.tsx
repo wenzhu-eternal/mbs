@@ -1,33 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 
-import type { routerProps } from '@/routers/types';
+import type { routerProps } from '@/components/Router/types';
 import { MyIcon } from '@/utils';
 
 import styles from './styles.module.less';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const renderMenu = (routes: routerProps[]): any =>
-  routes
+import type { MenuProps } from 'antd';
+
+type MenuItem = Required<MenuProps>['items'][number];
+
+const renderMenu = (routes: routerProps[]): MenuItem[] => {
+  const items = routes
     ?.filter((route: routerProps) => route.name && route.path)
     .map((route: routerProps) => {
       if (route.element || route.children) {
         return route.children
           ? {
-              key: route.path,
+              key: route.path as string,
               label: route.name,
               icon: route.icon && <MyIcon type={route.icon as string} />,
               children: renderMenu(route.children),
             }
           : {
-              key: route.path,
+              key: route.path as string,
               label: <Link to={route.path as string}>{route.name}</Link>,
               icon: route.icon && <MyIcon type={route.icon as string} />,
             };
       }
       return null;
     });
+  return (items?.filter(Boolean) as MenuItem[]) || [];
+};
 
 export default function SiderMenu({ routes }: { routes: routerProps[] }) {
   const { pathname } = useLocation();

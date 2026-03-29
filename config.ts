@@ -39,7 +39,11 @@ export default defaultConfig({
       children: [
         {
           path: '/404',
-          element: 'components/NotFount',
+          element: 'components/NotFound',
+        },
+        {
+          path: '/login',
+          element: 'pages/login',
         },
         {
           path: '/',
@@ -78,8 +82,25 @@ export default defaultConfig({
               icon: 'iconhear-full',
             },
             {
+              path: '/monitor',
+              name: '系统监控',
+              icon: 'iconhear-full',
+              children: [
+                {
+                  path: '/monitor/error-log',
+                  name: '错误日志',
+                  element: 'pages/monitor/errorLog',
+                  icon: 'iconhear-full',
+                },
+              ],
+            },
+            {
               form: '/',
               to: '/layout/one/one',
+            },
+            {
+              form: '*',
+              to: '/',
             },
           ],
         },

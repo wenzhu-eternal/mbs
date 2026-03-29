@@ -1,7 +1,7 @@
 import { Result, Button } from 'antd';
 import { Link } from 'react-router-dom';
 
-export default function NotFount404() {
+export default function NotFound() {
   return (
     <Result
       status="404"

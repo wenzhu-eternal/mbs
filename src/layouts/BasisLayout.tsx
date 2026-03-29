@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import FooterMenu from '@/components/BasisMenu/FooterMenu';
 import HeaderMenu from '@/components/BasisMenu/HeaderMenu';
 import SiderMenu from '@/components/BasisMenu/SiderMenu';
-import type { routerProps } from '@/routers/types.d.ts';
+import type { routerProps } from '@/components/Router/types';
 
 
 import styles from './BasisLayout.module.less';
