@@ -17,8 +17,7 @@ Object.defineProperty(window, 'matchMedia', {
 
 const mockConfig = {
   IP: {
-    development: 'http://localhost:9001/',
-    production: 'http://aieternal.icu:9001/',
+    development: 'http://localhost:9000/',
   },
   routers: [],
 };
