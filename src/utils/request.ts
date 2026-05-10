@@ -42,6 +42,9 @@ const axiosInstance = axios.create({
     Accept: 'application/json',
   },
   timeout: 10000,
+  paramsSerializer: {
+    indexes: null,
+  },
 });
 
 axiosInstance.interceptors.request.use(
